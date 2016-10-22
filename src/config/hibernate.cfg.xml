@@ -1,0 +1,50 @@
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+
+    <session-factory>
+
+        <!-- JDBC Database connection settings -->
+        <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="connection.url">jdbc:mysql://localhost:3306/gestion_parc_amendis?useSSL=false</property>
+        <property name="connection.username">root</property>
+        <property name="connection.password"></property>
+
+        <!-- JDBC connection pool settings ... using built-in test pool -->
+        <property name="connection.pool_size">1</property>
+
+        <!-- Select our SQL dialect -->
+        <property name="dialect">org.hibernate.dialect.MySQLDialect</property>
+
+        <!-- Disable the second-level cache -->
+        <property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property>
+        
+        <!-- Echo the SQL to stdout -->
+        <property name="show_sql">true</property>
+
+        <!-- Drop the existing tables and create new one -->
+        <property name="hbm2dll.auto">update</property>
+
+		<!-- Set the current session context -->
+		<property name="current_session_context_class">thread</property>
+		
+		<property name="show_sql">true</property>
+		
+ 
+ 		<mapping class="com.Amendis.GestionParc.DAO.Entity.Direction" />
+ 		<mapping class="com.Amendis.GestionParc.DAO.Entity.Service" />
+ 		<mapping class="com.Amendis.GestionParc.DAO.Entity.Admin" />
+ 		<mapping class="com.Amendis.GestionParc.DAO.Entity.Materiel" />
+ 		<mapping class="com.Amendis.GestionParc.DAO.Entity.InstallationLogiciel" />
+ 		<mapping class="com.Amendis.GestionParc.DAO.Entity.Logiciel" />
+ 		<mapping class="com.Amendis.GestionParc.DAO.Entity.User" />
+ 		<mapping class="com.Amendis.GestionParc.DAO.Entity.Fournisseur" />
+ 		<mapping class="com.Amendis.GestionParc.DAO.Entity.Agence" />
+ 		<mapping class="com.Amendis.GestionParc.DAO.Entity.Agent" />
+ 		<mapping class="com.Amendis.GestionParc.DAO.Entity.AffectationMateriel" />
+ 	
+    </session-factory>
+
+</hibernate-configuration>
