@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+
+	<title>Services | Gestion Parc - Amendis Tetouan</title>
+	<!-- html source code -->
+	<meta charset="UTF-8" />
+	<link rel="icon" href="../resources/img/ico.jpg" sizes="32x32" />
+	<link type="text/css" rel="stylesheet"
+		href="/gestionParcAmendis/faces/javax.faces.resource/theme.css?ln=primefaces-south-street"></link>
+	<link type="text/css" rel="stylesheet"
+		href="#{request.contextPath}/themes/cupertino/skin.css" />
+	<link rel='stylesheet prefetch'
+		href='http://fonts.googleapis.com/css?family=Lato&amp;subset=latin'></link>
+	<link rel='stylesheet prefetch'
+		href='https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css'></link>
+	<!-- rrrrrrrrrrrrrrrrrrrrrrrrrrrr	 -->
+
+	<link rel='stylesheet prefetch'
+		href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.11.0/css/bootstrap-select.css'></link>
+
+	<h:outputStylesheet library="css" name="style.css" />
+	<h:outputStylesheet library="css" name="bootstrap.css" />
+	<h:outputStylesheet library="css" name="font-awesome.css" />
+
+
+	<style>
+.ui-growl {
+	position: absolute;
+	top: 10%;
+	left: 75%;
+	z-index: 9999;
+}
+</style>
+	<script>
+		function confirme() {
+			return confirm("Voulez vous vraiment supprimer cette Service ?");
+		}
+	</script>
+</h:head>
+<h:body>
+
+	<!-- header -->
+	<ui:include src="includes/header.xhtml" />
+	<!-- /header -->
+	<div class="container-fluid">
+		<!-- container -->
+		<h:form>
+			<p:toolbar>
+				<f:facet name="left">
+					<h:commandButton styleClass="btn btn-primary"
+						value="#{serviceBean.nom} la liste des Services"
+						actionListener="#{serviceBean.showDataAction}" />
+					<h:outputText value="&#160;" />
+					<h:outputText value="&#160;" />
+					<h:commandButton styleClass="btn btn-primary"
+						value="Ajouter une nouvelle service"
+						actionListener="#{serviceBean.showformAction}" update=":addForm" />
+				</f:facet>
+				<f:facet name="right">Le : <p:separator />
+					<p:clock />
+				</f:facet>
+			</p:toolbar>
+
+		</h:form>
+
+		<h:panelGrid id="addForm" rendered="#{serviceBean.showform}">
+			<h:form>
+				<h:inputHidden value="#{serviceBean.id}"></h:inputHidden>
+				<h:inputHidden value="#{serviceBean.operation}"></h:inputHidden>
+
+				<table>
+					<tr>
+						<td><h:outputLabel value="Nom de service: " for="nom"></h:outputLabel>
+						</td>
+						<td><p:inputText value="#{serviceBean.nomServ}" id="nom"></p:inputText>
+						</td>
+					</tr>
+					<tr>
+						<td><h:outputLabel value="Chef de service: " for="chef"></h:outputLabel>
+						</td>
+						<td><p:inputText value="#{serviceBean.chefServ}" id="chef"></p:inputText>
+						</td>
+					</tr>
+					<tr>
+						<td><h:outputLabel value="Direction de service: " for="chefd"></h:outputLabel></td>
+						<td><h:selectOneMenu id="chefd"
+								styleClass="selectpicker  form-control input-lg"
+								value="#{serviceBean.dirServ}">
+								<f:selectItem itemLabel="Select One--" itemValue="0"></f:selectItem>
+								<f:selectItems value="#{serviceBean.items}" />
+							</h:selectOneMenu></td>
+					</tr>
+					<tr style="margin-top: 5px;">
+						<td><h:commandButton styleClass="btn btn-primary"
+								value="Sauvegarder" actionListener="#{serviceBean.ajouter}"></h:commandButton></td>
+						<td><h:commandButton styleClass="btn btn-danger"
+								value="Annuler" actionListener="#{serviceBean.hideformAction}"></h:commandButton></td>
+					</tr>
+				</table>
+			</h:form>
+
+		</h:panelGrid>
+		<br />
+		<p:growl id="messages" showDetail="true" />
+
+		<h:form rendered="#{serviceBean.showData}" style="margin-top: -10px;">
+			<p:dataTable id="tbl" value="#{serviceBean.listServ}" var="obj1"
+				rows="5" paginator="true" emptyMessage="Aucun service disponible"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink}
+				 {PreviousPageLink} {PageLinks} {NextPageLink}
+				  {LastPageLink} {RowsPerPageDropdown} {Exporters}"
+				rowsPerPageTemplate="5,10,15" style="margin-bottom:20px"
+				resizableColumns="true" reflow="true">
+				<f:facet name="header">
+					Liste des services
+				</f:facet>
+				<f:facet name="{Exporters}">
+					<h:commandLink>
+						<p:graphicImage name="/img/pdf.png" width="26"
+							title="Exporter la Liste en PDF"
+							style="position: relative;top: 3px;right: 10px;float:right" />
+						<p:dataExporter type="pdf" target="tbl" fileName="Liste_services" />
+					</h:commandLink>
+					<h:outputText value="Exporter la Liste en PDF"
+						style="position: relative;top: 3px;right: 10px;float:right"></h:outputText>
+
+				</f:facet>
+				<p:column filterBy="#{obj1.idServ}" headerText="#ID"
+					sortBy="#{obj1.idServ}">
+					<h:outputText value="#{obj1.idServ}" />
+				</p:column>
+				<p:column filterBy="#{obj1.nomServ}" headerText="Service"
+					sortBy="#{obj1.nomServ}">
+					<h:outputText value="#{obj1.nomServ}" />
+				</p:column>
+				<p:column filterBy="#{obj1.chefServ}" headerText="Chef de service"
+					sortBy="#{obj1.chefServ}">
+					<h:outputText value="#{obj1.chefServ}" />
+				</p:column>
+				<p:column filterBy="#{obj1.dir.nomDir}"
+					headerText="Direction de service" sortBy="#{obj1.dir.nomDir}">
+					<h:outputText value="#{obj1.dir.nomDir}" />
+				</p:column>
+
+				<p:column headerText="Operation" exportable="false">
+					<h:commandButton value="Modifier"
+						actionListener="#{serviceBean.modifier}"
+						styleClass="btn btn-primary" update=":formPopUp">
+						<f:param name="id" value="#{obj1.idServ}"></f:param>
+						<f:param name="operation" value="modifier"></f:param>
+					</h:commandButton>
+					<h:commandButton value="Supprimer" styleClass="btn btn-warning"
+						onclick="return confirme();"
+						actionListener="#{serviceBean.supprimer}">
+						<f:param name="id" value="#{obj1.idServ}"></f:param>
+						<f:param name="ns" value="#{obj1.nomServ}"></f:param>
+					</h:commandButton>
+				</p:column>
+			</p:dataTable>
+		</h:form>
+
+
+	</div>
+	<!-- footer -->
+		<ui:include src="includes/footer.xhtml" />
+	<!-- scripts -->
+
+	<script
+		src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+
+	<script
+		src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.11.0/js/bootstrap-select.js'></script>
+	<script
+		src='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js'></script>
+</h:body>
+</html>

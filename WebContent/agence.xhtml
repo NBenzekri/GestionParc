@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+
+	<title>Agences | Gestion Parc - Amendis Tetouan</title>
+	<meta charset="UTF-8" />
+	<link rel="icon" href="../resources/img/ico.jpg" sizes="32x32" />
+	<link type="text/css" rel="stylesheet"
+		href="/gestionParcAmendis/faces/javax.faces.resource/theme.css?ln=primefaces-south-street"></link>
+	<link type="text/css" rel="stylesheet"
+		href="#{request.contextPath}/themes/cupertino/skin.css" />
+	<link rel='stylesheet prefetch'
+		href='http://fonts.googleapis.com/css?family=Lato&amp;subset=latin'></link>
+	<link rel='stylesheet prefetch'
+		href='https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css'></link>
+
+
+	<link rel='stylesheet prefetch'
+		href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.11.0/css/bootstrap-select.css'></link>
+
+	<h:outputStylesheet library="css" name="style.css" />
+	<h:outputStylesheet library="css" name="bootstrap.css" />
+	<h:outputStylesheet library="css" name="font-awesome.css" />
+
+
+	<style>
+</style>
+	<script>
+		function confirme() {
+			return confirm("Voulez vous vraiment supprimer cette agence ?");
+		}
+	</script>
+</h:head>
+<h:body>
+
+	<!-- header -->
+	<ui:include src="includes/header.xhtml" />
+	<!-- /header -->
+
+
+	<div class="container-fluid">
+		<h:form>
+			<p:toolbar>
+				<f:facet name="left">
+					<h:commandButton styleClass="btn btn-primary"
+						value="#{agenceBean.nom} la liste des agences"
+						actionListener="#{agenceBean.showDataAction}" />
+					<h:outputText value="&#160;" />
+					<h:outputText value="&#160;" />
+					<h:commandButton styleClass="btn btn-primary"
+						value="Ajouter un nouveau agence"
+						actionListener="#{agenceBean.showformAction}" update=":addForm" />
+				</f:facet>
+				<f:facet name="right">Le : 
+					<h:outputText value="&#160;" />
+					<p:clock />
+				</f:facet>
+			</p:toolbar>
+
+		</h:form>
+
+		<p:messages closable="true" showDetail="true"></p:messages>
+
+		<h:panelGrid id="addForm" rendered="#{agenceBean.showform}">
+			<h:form>
+				<h:inputHidden value="#{agenceBean.id}"></h:inputHidden>
+				<h:inputHidden value="#{agenceBean.operation}"></h:inputHidden>
+
+				<table>
+					<tr>
+						<td><h:outputLabel value="Nom de l'agence " for="nom"></h:outputLabel>
+						</td>
+						<td><p:inputText value="#{agenceBean.nomAgence}" id="nom"></p:inputText>
+						</td>
+					</tr>
+					<tr>
+						<td><h:outputLabel value="Adresse de l'agence: " for="lv"></h:outputLabel>
+						</td>
+						<td><p:inputText value="#{agenceBean.addrAgence}" id="lv"></p:inputText>
+						</td>
+					</tr>
+					<tr style="margin-top: 5px;">
+						<td><h:commandButton styleClass="btn btn-primary"
+								value="Sauvegarder" actionListener="#{agenceBean.ajouter}"></h:commandButton></td>
+						<td><h:commandButton styleClass="btn btn-danger"
+								value="Annuler" actionListener="#{agenceBean.hideformAction}"></h:commandButton></td>
+					</tr>
+				</table>
+			</h:form>
+
+		</h:panelGrid>
+		<br />
+
+
+		<h:form rendered="#{agenceBean.showData}" style="margin-top: -10px;">
+			<p:dataTable id="tbl" value="#{agenceBean.list}" var="obj1"
+				rows="5" paginator="true" emptyMessage="Aucune agence disponible"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink}
+				 {PreviousPageLink} {PageLinks} {NextPageLink}
+				  {LastPageLink} {RowsPerPageDropdown} {Exporters}"
+				rowsPerPageTemplate="5,10,15" style="margin-bottom:20px"
+				resizableColumns="true" reflow="true">
+				<f:facet name="header">
+					Liste des agences
+				</f:facet>
+				<f:facet name="{Exporters}">
+					<h:commandLink>
+						<p:graphicImage name="/img/pdf.png" width="26"
+							title="Exporter la Liste en PDF"
+							style="position: relative;top: 3px;right: 10px;float:right" />
+						<p:dataExporter type="pdf" target="tbl" fileName="Liste_agence" />
+					</h:commandLink>
+					<h:outputText value="Exporter la Liste en PDF"
+						style="position: relative;top: 3px;right: 10px;float:right"></h:outputText>
+
+				</f:facet>
+				<p:column filterBy="#{obj1.idAgence}" headerText="#ID"
+					sortBy="#{obj1.idAgence}">
+					<h:outputText value="#{obj1.idAgence}" />
+				</p:column>
+				<p:column filterBy="#{obj1.nomAgence}" headerText="Nom d'Agence"
+					sortBy="#{obj1.nomAgence}">
+					<h:outputText value="#{obj1.nomAgence}" />
+				</p:column>
+				<p:column filterBy="#{obj1.addrAgence}" headerText="Adresse d'Agence"
+					sortBy="#{obj1.addrAgence}">
+					<h:outputText value="#{obj1.addrAgence}" />
+				</p:column>
+				<p:column filterBy="#{obj1.date}" headerText="Date d'ajout"
+					sortBy="#{obj1.date}">
+					<h:outputText value="#{obj1.date}">
+						<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+					</h:outputText>
+				</p:column>
+
+				<p:column headerText="Operation" exportable="false">
+					<h:commandButton value="Modifier"
+						actionListener="#{agenceBean.modifier}"
+						styleClass="btn btn-primary" update=":formPopUp">
+						<f:param name="id" value="#{obj1.idAgence}"></f:param>
+						<f:param name="operation" value="modifier"></f:param>
+					</h:commandButton>
+					<h:commandButton value="Supprimer" styleClass="btn btn-warning"
+						onclick="return confirme();"
+						actionListener="#{agenceBean.supprimer}">
+						<f:param name="id" value="#{obj1.idAgence}"></f:param>
+						<f:param name="ns" value="#{obj1.nomAgence}"></f:param>
+					</h:commandButton>
+				</p:column>
+			</p:dataTable>
+		</h:form>
+
+</div>
+
+
+		<ui:include src="includes/footer.xhtml" />
+		<script
+			src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+		<script
+			src='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js'></script>
+</h:body>
+</html>

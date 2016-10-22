@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+
+	<title>Gestion Parc - Amendis Tetouan | Home</title>
+	<meta charset="UTF-8" />
+	<link rel="icon" href="../resources/img/ico.jpg" sizes="32x32" />
+	<link type="text/css" rel="stylesheet"
+		href="/gestionParcAmendis/faces/javax.faces.resource/theme.css?ln=primefaces-south-street"></link>
+	<link type="text/css" rel="stylesheet"
+		href="#{request.contextPath}/themes/cupertino/skin.css" />
+	<link rel='stylesheet prefetch'
+		href='http://fonts.googleapis.com/css?family=Lato&amp;subset=latin'></link>
+	<link rel='stylesheet prefetch'
+		href='https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css'></link>
+	<!-- rrrrrrrrrrrrrrrrrrrrrrrrrrrr	 -->
+
+	<link rel='stylesheet prefetch'
+		href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.11.0/css/bootstrap-select.css'></link>
+
+	<h:outputStylesheet library="css" name="style.css" />
+	<h:outputStylesheet library="css" name="bootstrap.css" />
+	<h:outputStylesheet library="css" name="font-awesome.css" />
+
+
+	<style>
+</style>
+	<script>
+		function confirme() {
+			return confirm("Voulez vous vraiment supprimer ce logiciel ?");
+		}
+	</script>
+</h:head>
+<h:body>
+
+	<!-- header -->
+	<ui:include src="includes/header.xhtml" />
+	<!-- /header -->
+	<p:growl for="messages" showDetail="true" />
+
+	<div class="container-fluid">
+		<!-- container -->
+
+				<h:form>
+					<p:toolbar>
+						<f:facet name="left">
+							<h:commandButton styleClass="btn btn-primary"
+								value="#{logicielBean.nom} la liste des Logiciels"
+								actionListener="#{logicielBean.showDataAction}" />
+							<h:outputText value="&#160;" />
+							<h:outputText value="&#160;" />
+							<h:commandButton styleClass="btn btn-primary"
+								value="Ajouter un nouveau Logiciel"
+								actionListener="#{logicielBean.showformAction}"
+								update=":addForm" />
+						</f:facet>
+						<f:facet name="right">Le : 
+					<h:outputText value="&#160;" />
+							<p:clock />
+						</f:facet>
+					</p:toolbar>
+
+				</h:form>
+
+				<p:messages showSummary="true" closable="true" showDetail="true"></p:messages>
+
+				<h:panelGrid id="addForm" rendered="#{logicielBean.showform}">
+					<h:form>
+						<h:inputHidden value="#{logicielBean.id}"></h:inputHidden>
+						<h:inputHidden value="#{logicielBean.operation}"></h:inputHidden>
+
+						<table>
+							<tr>
+								<td><h:outputLabel value="Nom de Logiciel " for="nom"></h:outputLabel>
+								</td>
+								<td><p:inputText value="#{logicielBean.nomL}" id="nom"></p:inputText>
+								</td>
+								<td><h:outputText value="&#160;" /></td>
+								<td><h:outputLabel value="Licence de Logiciel: " for="ll"></h:outputLabel>
+								</td>
+								<td><p:inputText value="#{logicielBean.licenceL}" id="ll"></p:inputText>
+								</td>
+
+							</tr>
+							<tr>
+								<td><h:outputLabel value="Version de Logiciel: " for="lv"></h:outputLabel>
+								</td>
+								<td><p:inputText value="#{logicielBean.versionL}" id="lv"></p:inputText>
+								</td>
+								<td><h:outputText value="&#160;" /></td>
+								<td><h:outputLabel value="Editeur de Logiciel: " for="le"></h:outputLabel>
+								</td>
+								<td><p:inputText value="#{logicielBean.editeurL}" id="le"></p:inputText>
+								</td>
+							</tr>
+							<tr>
+								<td><h:outputLabel value="Numero° de Série: " for="ls"></h:outputLabel>
+								</td>
+								<td><p:inputText value="#{logicielBean.numSerieL}" id="ls"></p:inputText>
+								</td>
+							</tr>
+							<tr style="margin-top: 5px;">
+								<td><h:commandButton styleClass="btn btn-primary"
+										value="Sauvegarder" actionListener="#{logicielBean.ajouter}"></h:commandButton></td>
+								<td><h:commandButton styleClass="btn btn-danger"
+										value="Annuler"
+										actionListener="#{logicielBean.hideformAction}"></h:commandButton></td>
+							</tr>
+						</table>
+					</h:form>
+
+				</h:panelGrid>
+				<br />
+
+
+				<h:form rendered="#{logicielBean.showData}"
+					style="margin-top: -10px;">
+					<p:dataTable id="tbl" value="#{logicielBean.list}" var="obj1"
+						rows="5" paginator="true" emptyMessage="Aucun Logiciel disponible"
+						paginatorTemplate="{CurrentPageReport} {FirstPageLink}
+				 {PreviousPageLink} {PageLinks} {NextPageLink}
+				  {LastPageLink} {RowsPerPageDropdown} {Exporters}"
+						rowsPerPageTemplate="5,10,15" style="margin-bottom:20px"
+						resizableColumns="true" reflow="true">
+						<f:facet name="header">
+					Liste des Logiciels
+							<p:commandButton id="toggler" type="button" value="colonnes"
+								icon="fa fa-columns" style="margin:auto;" />
+							<p:columnToggler datasource="tbl" trigger="toggler" />
+						</f:facet>
+						<f:facet name="{Exporters}">
+							<h:commandLink>
+								<p:graphicImage name="/img/pdf.png" width="26"
+									title="Exporter la Liste en PDF"
+									style="position: relative;top: 3px;right: 10px;float:right" />
+								<p:dataExporter type="pdf" target="tbl"
+									fileName="Liste_Logiciel" />
+							</h:commandLink>
+							<h:outputText value="Exporter la Liste en PDF"
+								style="position: relative;top: 3px;right: 10px;float:right"></h:outputText>
+
+						</f:facet>
+						<p:column filterBy="#{obj1.idL}" headerText="#ID"
+							sortBy="#{obj1.idL}">
+							<h:outputText value="#{obj1.idL}" />
+						</p:column>
+						<p:column filterBy="#{obj1.nomL}" headerText="Nom"
+							sortBy="#{obj1.nomL}">
+							<h:outputText value="#{obj1.nomL}" />
+						</p:column>
+						<p:column filterBy="#{obj1.licenceL}" headerText="Licence"
+							sortBy="#{obj1.licenceL}">
+							<h:outputText value="#{obj1.licenceL}" />
+						</p:column>
+						<p:column filterBy="#{obj1.versionL}" headerText="version"
+							sortBy="#{obj1.versionL}">
+							<h:outputText value="#{obj1.versionL}" />
+						</p:column>
+						<p:column filterBy="#{obj1.editeurL}" headerText="editeur"
+							sortBy="#{obj1.editeurL}">
+							<h:outputText value="#{obj1.editeurL}" />
+						</p:column>
+						<p:column filterBy="#{obj1.numSerieL}" headerText="N° Série"
+							sortBy="#{obj1.numSerieL}">
+							<h:outputText value="#{obj1.numSerieL}" />
+						</p:column>
+						<p:column filterBy="#{obj1.dateL}" headerText="Date d'ajout"
+							sortBy="#{obj1.dateL}">
+							<h:outputText value="#{obj1.dateL}">
+								<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
+							</h:outputText>
+						</p:column>
+
+						<p:column headerText="Operation" exportable="false">
+							<h:commandButton value="Modifier"
+								actionListener="#{logicielBean.modifier}"
+								styleClass="btn btn-primary" update=":formPopUp">
+								<f:param name="id" value="#{obj1.idL}"></f:param>
+								<f:param name="operation" value="modifier"></f:param>
+							</h:commandButton>
+							<h:commandButton value="Supprimer" styleClass="btn btn-warning"
+								onclick="return confirme();"
+								actionListener="#{logicielBean.supprimer}">
+								<f:param name="id" value="#{obj1.idL}"></f:param>
+								<f:param name="ns" value="#{obj1.nomL}"></f:param>
+							</h:commandButton>
+						</p:column>
+					</p:dataTable>
+				</h:form>
+
+
+
+	</div>
+
+
+	<!-- 			footer					 -->
+
+	<ui:include src="includes/footer.xhtml" />
+	<script
+		src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+	<script
+		src='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js'></script>
+</h:body>
+</html>

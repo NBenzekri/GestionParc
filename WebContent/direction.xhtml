@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+
+	<title>Directions | Gestion Parc - Amendis Tetouan</title>
+	<meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
+	<link rel="icon" href="../resources/img/ico.jpg" sizes="32x32" />
+	<link type="text/css" rel="stylesheet"
+		href="/gestionParcAmendis/faces/javax.faces.resource/theme.css?ln=primefaces-south-street"></link>
+	<link type="text/css" rel="stylesheet"
+		href="#{request.contextPath}/themes/cupertino/skin.css" />
+	<link rel='stylesheet prefetch'
+		href='http://fonts.googleapis.com/css?family=Lato&amp;subset=latin'></link>
+	<link rel='stylesheet prefetch'
+		href='https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css'></link>
+	<!-- rrrrrrrrrrrrrrrrrrrrrrrrrrrr	 -->
+
+	<h:outputStylesheet library="css" name="style.css" />
+	<h:outputStylesheet library="css" name="bootstrap.css" />
+	<h:outputStylesheet library="css" name="font-awesome.css" />
+
+
+	<style>
+.ui-growl {
+	position: absolute;
+	top: 20%;
+	left: 77%;
+	z-index: 9999;
+}
+</style>
+	<script>
+		/*  		function confirmDelete() {
+
+		 var response = false;
+		 BootstrapDialog.confirm({
+		 title : 'Confirme Delete',
+		 message : 'Are you sur you want to delete this item',
+		 type : BootstrapDialog.TYPE_DANGER,
+		 closable : true,
+		 draggable : true,
+		 btnCancelLabel : 'No',
+		 btnOKLabel : 'Yes!',
+		 btnOKClass : 'btn-warning',
+		 callback : function(result) {
+		 if (result) {
+		 //if the user click Yes
+		 //define your logic
+		 response = confirm("ddddd");
+		 } else {
+		 //if the user click No 
+		 //do what ever you want
+		 response = false;
+		 }
+		 }
+		 });
+		 return response;
+
+		 } 
+
+		 function isConfirm(message) {
+		 return confirm(message);
+		 }
+		 function conf() {
+		 BootstrapDialog.confirm('Hi Apple, are you sure?', 'hiii',
+		 function(result) {
+		 });
+		 return result;
+		 }
+		 function confirmer() {
+		 var response = false;
+		 BootstrapDialog.confirm({
+		 title : 'Confirmer la Supprission',
+		 message : 'voulez vous vraiment supprimer cette direction ?'
+		 }, function(result) {
+		 if (result) {
+		 return (result);
+		 } else {
+		 return (result);
+		 }
+		 });
+		 }  */
+		function confirme() {
+			return confirm("voulez vous vraiment supprimer cette direction ?");
+		}
+	</script>
+</h:head>
+<h:body>
+	<!-- header -->
+	<ui:include src="includes/header.xhtml" />
+	<!-- /header -->
+<!-- 	<p:growl showDetail="true" id="messages" /> -->
+	<div class="container-fluid">
+		<!-- container -->
+		<h:form>
+			<p:toolbar>
+				<f:facet name="left">
+					<h:commandButton styleClass="btn btn-primary"
+						value="#{directionBean.nom} la liste des Directions"
+						actionListener="#{directionBean.showDataAction}" />
+					<h:outputText value="&#160;" />
+					<h:outputText value="&#160;" />
+					<h:commandButton styleClass="btn btn-primary"
+						value="Ajouter une nouvelle Direction"
+						actionListener="#{directionBean.showformAction}" update=":addForm" />
+				</f:facet>
+				<f:facet name="right">Le : 	<p:clock />
+				</f:facet>
+			</p:toolbar>
+
+		</h:form>
+		<p:messages showSummary="true" closable="true" showDetail="true"></p:messages>
+		<!-- Afficher la Liste des direction -->
+
+
+		<h:panelGrid id="addForm" rendered="#{directionBean.showform}">
+			<table>
+				<h:form>
+					<h:inputHidden value="#{directionBean.id}"></h:inputHidden>
+					<h:inputHidden value="#{directionBean.operation}"></h:inputHidden>
+					<tr>
+						<td><h:outputLabel value="Nom de Direction : " for="nom"></h:outputLabel>
+						</td>
+						<td><p:spacer width="10" /> <p:inputText
+								value="#{directionBean.nomDir}" id="nom"></p:inputText></td>
+					</tr>
+					<tr>
+						<td><h:outputLabel value="Chef de Direction : " for="chef"></h:outputLabel>
+						</td>
+						<td><p:spacer width="10" /> <p:inputText
+								value="#{directionBean.chefDir}" id="chef"></p:inputText></td>
+					</tr>
+					<tr></tr>
+					<tr style="margin-top: 5px;">
+						<td><h:commandButton styleClass="btn btn-primary"
+								value="Sauvegarder" actionListener="#{directionBean.ajouter}"></h:commandButton></td>
+						<td><h:commandButton styleClass="btn btn-danger"
+								value="Annuler" actionListener="#{directionBean.hideformAction}"></h:commandButton></td>
+					</tr>
+				</h:form>
+			</table>
+		</h:panelGrid>
+		<BR />
+
+		<h:form rendered="#{directionBean.showData}"
+			style="margin-top: -10px;">
+			<p:dataTable id="tbl" value="#{directionBean.listDir}" var="obj1"
+				paginator="true" emptyMessage="Aucun Direction disponible"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
+				rowsPerPageTemplate="0,5,10,15" style="margin-bottom:20px"
+				resizableColumns="true" reflow="true">
+				<f:facet name="header">
+					Liste des Directions
+				</f:facet>
+				<f:facet name="header">
+					<p:commandButton id="toggler" type="button"
+						icon="ui-icon-calculator" />
+					<p:columnToggler datasource="tbl" trigger="toggler" />
+				</f:facet>
+				<f:facet name="{Exporters}">
+					<h:commandLink>
+						<p:graphicImage name="/img/pdf.png" width="26"
+							title="Exporter la Liste en PDF"
+							style="position: relative;top: 3px;right: 10px;float:right" />
+						<p:dataExporter type="pdf" target="tbl"
+							fileName="Liste_Directions" />
+					</h:commandLink>
+				</f:facet>
+				<p:column filterBy="#{obj1.idDir}" headerText="#ID"
+					sortBy="#{obj1.idDir}">
+					<h:outputText value="#{obj1.idDir}" />
+				</p:column>
+				<p:column filterBy="#{obj1.nomDir}" headerText="Direction"
+					sortBy="#{obj1.nomDir}">
+					<h:outputText value="#{obj1.nomDir}" />
+				</p:column>
+				<p:column filterBy="#{obj1.chefDir}" headerText="Directeur"
+					sortBy="#{obj1.chefDir}">
+					<h:outputText value="#{obj1.chefDir}" />
+				</p:column>
+
+				<p:column headerText="Operation" exportable="false">
+					<h:commandButton value="Modifier"
+						actionListener="#{directionBean.modifier}"
+						styleClass="btn btn-primary" update=":formDir">
+						<f:param name="id" value="#{obj1.idDir}"></f:param>
+						<f:param name="operation" value="modifier"></f:param>
+					</h:commandButton>
+					<h:commandButton value="Supprimer" styleClass="btn btn-warning"
+						onclick="return confirme();"
+						actionListener="#{directionBean.supprimer}">
+						<f:param name="id" value="#{obj1.idDir}"></f:param>
+						<f:param name="n" value="#{obj1.nomDir}"></f:param>
+					</h:commandButton>
+				</p:column>
+			</p:dataTable>
+
+		</h:form>
+
+
+
+	</div>
+
+	<br />
+	<br />
+	<br />
+	<br />
+	<!-- footer -->
+	<ui:include src="includes/footer.xhtml" />
+	<!-- scripts -->
+	<script
+		src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+	<script
+		src='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js'></script>
+</h:body>
+</html>

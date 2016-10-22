@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+
+	<title>Home | Gestion Parc - Amendis Tetouan</title>
+	<!-- html source code -->
+	<meta charset="UTF-8" />
+	<link rel="icon" href="../resources/img/ico.jpg" sizes="32x32" />
+	<link type="text/css" rel="stylesheet"
+		href="/gestionParcAmendis/faces/javax.faces.resource/theme.css?ln=primefaces-south-street"></link>
+	<link type="text/css" rel="stylesheet"
+		href="#{request.contextPath}/themes/cupertino/skin.css" />
+	<link rel='stylesheet prefetch'
+		href='http://fonts.googleapis.com/css?family=Lato&amp;subset=latin'></link>
+	<link rel='stylesheet prefetch'
+		href='https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css'></link>
+	<link rel='stylesheet prefetch'
+		href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.11.2/css/bootstrap-select.min.css'></link>
+	<!-- rrrrrrrrrrrrrrrrrrrrrrrrrrrr	 -->
+
+	<link rel='stylesheet prefetch'
+		href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.11.0/css/bootstrap-select.css'></link>
+
+	<h:outputStylesheet library="css" name="style.css" />
+	<h:outputStylesheet library="css" name="bootstrap.css" />
+	<h:outputStylesheet library="css" name="font-awesome.css" />
+
+
+	<style>
+</style>
+	<script>
+		function confirme() {
+			return confirm("Voulez vous vraiment supprimer ce logiciel ?");
+		}
+	</script>
+</h:head>
+<h:body>
+
+	<!-- header -->
+	<ui:include src="includes/header.xhtml" />
+	<!-- /header -->
+	<p:growl for="messages" showDetail="true" />
+
+	<div class="container-fluid">
+		<!-- container -->
+
+		<h:form>
+			<p:toolbar>
+				<f:facet name="left">
+					<h:commandButton styleClass="btn btn-primary"
+						value="#{materielBean.nom} la liste des Materiels"
+						actionListener="#{materielBean.showDataAction}" />
+					<h:outputText value="&#160;" />
+					<h:outputText value="&#160;" />
+					<h:commandButton styleClass="btn btn-primary"
+						value="Ajouter un nouveau Materiel"
+						actionListener="#{materielBean.showformAction}" update=":addForm" />
+				</f:facet>
+				<f:facet name="right">Le : 
+					<h:outputText value="&#160;" />
+					<p:clock />
+				</f:facet>
+			</p:toolbar>
+
+		</h:form>
+
+		<p:messages showSummary="true" closable="true" showDetail="true"></p:messages>
+
+		<h:panelGrid id="addForm" rendered="#{materielBean.showform}">
+			<h:form>
+				<h:inputHidden value="#{materielBean.id}"></h:inputHidden>
+				<h:inputHidden value="#{materielBean.operation}"></h:inputHidden>
+				<table>
+					<tr>
+						<td><h:outputLabel value="Nom de Materiel " for="nom2"></h:outputLabel>
+							<span style="color: red">* </span></td>
+						<td><p:inputText value="#{materielBean.nomMat}" id="nom2"></p:inputText>
+						</td>
+						<td><h:outputText value="&#160;" /></td>
+						<td><h:outputLabel value="Prix unitaire d'achat: " for="ll2"></h:outputLabel>
+						</td>
+						<td><p:inputText value="#{materielBean.prixUnitaireMat}"
+								id="ll2"></p:inputText></td>
+					</tr>
+					<tr>
+						<td><h:outputLabel value="N° bon de commande: " for="lv2"></h:outputLabel>
+							<span style="color: red">* </span></td>
+						<td><p:inputText value="#{materielBean.numBDCMat}" id="lv2"></p:inputText>
+						</td>
+						<td><h:outputText value="&#160;" /></td>
+						<td><h:outputLabel value="Date d'achat: " for="le2"></h:outputLabel>
+						</td>
+						<td><p:inputText value="#{materielBean.dateAchatMat}"
+								id="le2"></p:inputText></td>
+					</tr>
+					<tr>
+						<td><h:outputLabel value="N° Série: " for="lv1"></h:outputLabel>
+							<span style=" color: red">* </span></td>
+						<td><p:inputText value="#{materielBean.numSerieMat}" id="lv1"></p:inputText></td>
+						<td><h:outputText value="&#160;" /></td>
+						<td><h:outputLabel value="Date début de Garantie: " for="le3"></h:outputLabel></td>
+						<td><p:inputText value="#{materielBean.dateDebutGarantieMat}"
+								id="le3"></p:inputText>
+								 <!-- <p:inputText
+										value="#{materielBean.dateDebutGarantieMat}" id="le"></p:inputText> -->
+						</td>
+					</tr>
+					<tr>
+						<td><h:outputLabel value="Quantité : " for="le0"></h:outputLabel>
+							<span style=" color: red">* </span></td>
+						<td><p:inputText value="#{materielBean.qteMat}" id="le0"></p:inputText></td>
+						<td><h:outputText value="&#160;" /></td>
+						<td><h:outputLabel value="Duree Garantie : " for="lv4"></h:outputLabel></td>
+						<td><p:inputText value="#{materielBean.dureeGarantieMat}"
+								id="lv4"></p:inputText></td>
+
+					</tr>
+					<tr>
+						<td><h:outputLabel value="Fournisseur : " for="ag0"></h:outputLabel>
+							<span style="color: red">* </span></td>
+						<td><h:selectOneMenu id="ag0" styleClass="form-control input-lg"
+								value="#{materielBean.idFournMat}">
+								<f:selectItem itemLabel="Select One--" itemValue="0"></f:selectItem>
+								<f:selectItems value="#{materielBean.items}" />
+							</h:selectOneMenu></td>
+
+						<td><h:outputText value="&#160;" /></td>
+						
+						<td><h:outputLabel value="Type de Materiel : " for="agd1"></h:outputLabel>
+							<span style="color: red">* </span></td>
+						<td><h:selectOneMenu id="agd1" styleClass="form-control input-lg"
+								value="#{materielBean.idFournMat}">
+								<f:selectItem itemLabel="Select One--" itemValue=""></f:selectItem>
+								<f:selectItem itemLabel="PC" itemValue="PC"></f:selectItem>
+								<f:selectItem itemLabel="imprimante" itemValue="imprimante"></f:selectItem>
+								<f:selectItem itemLabel="disque dur" itemValue="disque dur"></f:selectItem>
+								<f:selectItem itemLabel="Ecran d'ordinateur"
+									itemValue="Ecran d'ordinateur"></f:selectItem>
+								<f:selectItem itemLabel="Scanner" itemValue=""></f:selectItem>
+								<f:selectItem itemLabel="Clavier-Souris"
+									itemValue="Clavier-Souris"></f:selectItem>
+							</h:selectOneMenu></td>
+					</tr>
+					<tr>
+						<td><h:outputLabel value="Description de Materiel: " for="ls0"></h:outputLabel></td>
+						<td><p:inputTextarea value="#{materielBean.descMat}" id="ls0"></p:inputTextarea></td>
+					</tr>
+					<tr style="margin-top: 5px;">
+						<td><h:commandButton styleClass="btn btn-primary"
+								value="Sauvegarder" actionListener="#{materielBean.ajouter}"></h:commandButton></td>
+						<td><h:commandButton styleClass="btn btn-danger"
+								value="Annuler" actionListener="#{materielBean.hideformAction}"></h:commandButton></td>
+						<td><h6>
+								<span style="color: red">* </span>: Champs obligatoires
+							</h6></td>
+					</tr>
+				</table>
+			</h:form>
+		</h:panelGrid>
+		<br />
+
+
+		<h:form rendered="#{materielBean.showData}" style="margin-top: -10px;">
+			<p:dataTable id="tbl2" value="#{materielBean.list}" var="obj2"
+				rows="5" paginator="true" emptyMessage="Aucun matériel disponible"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink}
+				 {PreviousPageLink} {PageLinks} {NextPageLink}
+				  {LastPageLink} {RowsPerPageDropdown} {Exporters}"
+				rowsPerPageTemplate="5,10,15" style="margin-bottom:20px"
+				resizableColumns="true" reflow="true">
+				<f:facet name="header">
+					Liste des Matériels
+							<p:commandButton id="toggler2" type="button" value="colonnes"
+						icon="fa fa-columns" style="margin:auto;" />
+					<p:columnToggler datasource="tbl2" trigger="toggler2" />
+				</f:facet>
+				<f:facet name="{Exporters}">
+					<h:commandLink>
+						<p:graphicImage name="/img/pdf.png" width="26"
+							title="Exporter la Liste en PDF"
+							style="position: relative;top: 3px;right: 10px;float:right" />
+						<p:dataExporter type="pdf" target="tbl2"
+							fileName="Liste_Materiels_disponibles" />
+					</h:commandLink>
+					<h:outputText value="Exporter la Liste en PDF"
+						style="position: relative;top: 3px;right: 10px;float:right"></h:outputText>
+
+				</f:facet>
+				<p:column filterBy="#{obj2.idMat}" headerText="#ID"
+					sortBy="#{obj2.idMat}">
+					<h:outputText value="#{obj2.idMat}" />
+				</p:column>
+				<p:column filterBy="#{obj2.nomMat}" headerText="Nom"
+					sortBy="#{obj2.nomMat}">
+					<h:outputText value="#{obj2.nomMat}" />
+				</p:column>
+				<p:column filterBy="#{obj2.typeMat}" headerText="Type"
+					sortBy="#{obj2.typeMat}">
+					<h:outputText value="#{obj2.typeMat}" />
+				</p:column>
+				<p:column filterBy="#{obj2.qteMat}" headerText="Quantité"
+					sortBy="#{obj2.qteMat}">
+					<h:outputText value="#{obj2.qteMat}" />
+				</p:column>
+				<p:column filterBy="#{obj2.four.nomFourn}" headerText="Fournisseur"
+					sortBy="#{obj2.four.nomFourn}">
+					<h:outputText value="#{obj2.four.nomFourn}" />
+				</p:column>
+				<p:column filterBy="#{obj2.prixUnitaireMat}"
+					headerText="Prix Unitaire" sortBy="#{obj2.prixUnitaireMat}">
+					<h:outputText value="#{obj2.prixUnitaireMat}" />
+				</p:column>
+				<p:column filterBy="#{obj2.descMat}" headerText="Description"
+					sortBy="#{obj2.descMat}">
+					<h:outputText value="#{obj2.descMat}" />
+				</p:column>
+				<p:column filterBy="#{obj2.numSerieMat}" headerText="N° Série"
+					sortBy="#{obj2.numSerieMat}">
+					<h:outputText value="#{obj2.numSerieMat}" />
+				</p:column>
+				<p:column filterBy="#{obj2.dateDebutGarantieMat}"
+					headerText="Garentie - durée" sortBy="#{obj2.dateDebutGarantieMat}">
+					<h:outputText
+						value="#{obj2.prixUnitaireMat} - #{obj2.dureeGarantieMat}" />
+				</p:column>
+				<p:column filterBy="#{obj2.dateAchatMat}" headerText="Date d'achat"
+					sortBy="#{obj2.dateAchatMat}">
+					<h:outputText value="#{obj2.dateAchatMat}" />
+				</p:column>
+
+				<p:column headerText="Operation" exportable="false">
+					<h:commandButton value="Modifier"
+						actionListener="#{materielBean.modifier}"
+						styleClass="btn btn-primary" update=":formPopUp">
+						<f:param name="id" value="#{obj2.idMat}"></f:param>
+						<f:param name="operation" value="modifier"></f:param>
+					</h:commandButton>
+					<h:commandButton value="Supprimer" styleClass="btn btn-warning"
+						onclick="return confirme();"
+						actionListener="#{materielBean.supprimer}">
+						<f:param name="id" value="#{obj2.idMat}"></f:param>
+						<f:param name="ns" value="#{obj2.nomMat}"></f:param>
+					</h:commandButton>
+				</p:column>
+			</p:dataTable>
+		</h:form>
+
+
+
+	</div>
+
+
+	<!-- 			footer					 -->
+
+	<ui:include src="includes/footer.xhtml" />
+	<script
+		src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+	<script
+		src='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js'></script>
+</h:body>
+</html>
